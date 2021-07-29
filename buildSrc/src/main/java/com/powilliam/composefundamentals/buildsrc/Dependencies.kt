@@ -20,6 +20,7 @@ object Dependencies {
         }
 
         object Lifecycle {
+            const val viewModel = "androidx.lifecycle:lifecycle-viewmodel:2.3.1"
             const val viewModelCompose =
                 "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07"
         }

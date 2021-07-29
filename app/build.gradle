@@ -48,6 +48,7 @@ dependencies {
 
     implementation Dependencies.AndroidX.Activity.activityCompose
 
+    implementation Dependencies.AndroidX.Lifecycle.viewModel
     implementation Dependencies.AndroidX.Lifecycle.viewModelCompose
 
     implementation Dependencies.AndroidX.Compose.ui
