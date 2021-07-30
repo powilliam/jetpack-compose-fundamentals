@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +44,9 @@ fun Counter(uiState: CounterState, onClick: () -> Unit = {}) {
             Text(text = "${uiState.value}", style = MaterialTheme.typography.h6)
 
             AnimatedVisibility(visible = uiState.isPlaceholderVisible) {
-                Text(text = "Times you have clicked", style = MaterialTheme.typography.subtitle1)
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Text(text = "Times you have clicked", style = MaterialTheme.typography.subtitle1)
+                }
             }
         }
     }
