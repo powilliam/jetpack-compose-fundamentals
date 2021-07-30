@@ -40,7 +40,7 @@ typealias Callback = () -> Unit
 1.  @Composable annotations informs the compiler that it will transform data into UI.
 2.  By default, @Composable functions doesn't return anything.
 3.  Normally, when a @Composable function returns any data, it's a way to do some calculation.
-4.  @Composable functions can receive parameters. They receive it as input and uses it to render UI as output.
+4.  @Composable functions can receive parameters. They receive it as input and uses it to render UI or resolve calculations as output.
 */
 @Composable
 fun SomeComposableScreen(
