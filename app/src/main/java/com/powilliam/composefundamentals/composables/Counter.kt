@@ -26,7 +26,9 @@ import com.powilliam.composefundamentals.viewmodels.CounterState
 fun Counter(uiState: CounterState, onClick: () -> Unit = {}) {
     /*
     * 1. @Composable functions can store a single object in memory by using remember delegating function.
-    * 2. It will store the initial value during the composition and return during recomposition
+    * 2. It will store the initial value during the composition and return during recomposition.
+    * 3. Remember doesn't survive during configuration changes, only recompositions. Instead, you must use rememberSaveable
+    * 4. ViewModels survives to configuration changes so @Composable functions that observes or collects some state doesn't need to implement any saver
     *
     * val (visible, visibleSet) = remember { mutableStateOf(value = false) }
     * */
@@ -42,14 +44,10 @@ fun Counter(uiState: CounterState, onClick: () -> Unit = {}) {
                 .padding(all = 8.dp)
                 .animateContentSize()
         ) {
-            Text(text = "${uiState.value}", style = MaterialTheme.typography.body1)
+            Text(text = "${uiState.value}", style = MaterialTheme.typography.h6)
 
             AnimatedVisibility(visible = uiState.isPlaceholderVisible) {
-                Text(
-                    text = "Times you have clicked",
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.paddingFromBaseline(top = 8.dp)
-                )
+                Text(text = "Times you have clicked", style = MaterialTheme.typography.subtitle1)
             }
         }
     }
@@ -61,7 +59,10 @@ fun Counter(uiState: CounterState, onClick: () -> Unit = {}) {
 @Composable
 private fun Counter_LightPreview() {
     ComposeFundamentalsTheme {
-        Counter(uiState = CounterState(value = 0))
+        Column {
+            Counter(uiState = CounterState(value = 0))
+            Counter(uiState = CounterState(value = 0, isPlaceholderVisible = true))
+        }
     }
 }
 
@@ -71,6 +72,9 @@ private fun Counter_LightPreview() {
 @Composable
 private fun Counter_DarkPreview() {
     ComposeFundamentalsTheme {
-        Counter(uiState = CounterState(value = 0))
+        Column {
+            Counter(uiState = CounterState(value = 0))
+            Counter(uiState = CounterState(value = 0, isPlaceholderVisible = true))
+        }
     }
 }
