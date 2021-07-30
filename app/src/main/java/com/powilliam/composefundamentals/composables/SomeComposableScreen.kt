@@ -1,13 +1,13 @@
 package com.powilliam.composefundamentals.composables
 
 import android.content.res.Configuration
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.powilliam.composefundamentals.ui.ComposeFundamentalsTheme
+import com.powilliam.composefundamentals.viewmodels.CounterState
 
 /*
 1.  @Composable annotations informs the compiler that it will transform data into UI.
@@ -32,12 +33,15 @@ import com.powilliam.composefundamentals.ui.ComposeFundamentalsTheme
 * 2. @Composable functions can execute in parallel
 * 3. @Composable functions can be skyped (normally when its parent suffers recompositions but they doesn't need to be redraw)
 * */
+@ExperimentalMaterialApi
+@ExperimentalAnimationApi
 @Composable
 fun SomeComposableScreen(
-    uiState: State<Int>,
+    uiState: State<CounterState>,
     onDecrement: ActionCallback = {},
     onReset: ActionCallback = {},
-    onIncrement: ActionCallback = {}
+    onIncrement: ActionCallback = {},
+    onClickCounterCard: ActionCallback = {}
 ) {
     Scaffold(
         floatingActionButton = {
@@ -50,23 +54,27 @@ fun SomeComposableScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "${uiState.value}", style = MaterialTheme.typography.h6)
+            Counter(uiState = uiState.value, onClick = onClickCounterCard)
         }
     }
 }
 
+@ExperimentalMaterialApi
+@ExperimentalAnimationApi
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun SomeComposableScreen_LightPreview() {
     ComposeFundamentalsTheme(isDark = false) {
-        SomeComposableScreen(uiState = remember { mutableStateOf(0) })
+        SomeComposableScreen(uiState = remember { mutableStateOf(CounterState(value = 0)) })
     }
 }
 
+@ExperimentalMaterialApi
+@ExperimentalAnimationApi
 @Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SomeComposableScreen_DarkPreview() {
     ComposeFundamentalsTheme {
-        SomeComposableScreen(uiState = remember { mutableStateOf(0) })
+        SomeComposableScreen(uiState = remember { mutableStateOf(CounterState(value = 0)) })
     }
 }

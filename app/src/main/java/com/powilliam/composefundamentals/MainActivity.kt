@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.collectAsState
 import com.powilliam.composefundamentals.composables.SomeComposableScreen
 import com.powilliam.composefundamentals.ui.ComposeFundamentalsTheme
@@ -13,6 +15,8 @@ import com.powilliam.composefundamentals.viewmodels.CounterViewModel
 class MainActivity : ComponentActivity() {
     private val counterViewModel: CounterViewModel by viewModels()
 
+    @ExperimentalAnimationApi
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -21,7 +25,8 @@ class MainActivity : ComponentActivity() {
                     uiState = counterViewModel.uiState.collectAsState(),
                     onDecrement = { counterViewModel.dispatch(event = CounterEvent.Decrement) },
                     onReset = { counterViewModel.dispatch(event = CounterEvent.Reset) },
-                    onIncrement = { counterViewModel.dispatch(event = CounterEvent.Increment) }
+                    onIncrement = { counterViewModel.dispatch(event = CounterEvent.Increment) },
+                    onClickCounterCard = { counterViewModel.dispatch(event = CounterEvent.TogglePlaceholderVisibility) }
                 )
             }
         }
