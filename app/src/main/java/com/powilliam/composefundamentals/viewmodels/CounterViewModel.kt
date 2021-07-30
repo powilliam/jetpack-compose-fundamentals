@@ -1,11 +1,13 @@
 package com.powilliam.composefundamentals.viewmodels
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+@Stable
 data class CounterState(val value: Int, val isPlaceholderVisible: Boolean = false)
 
 sealed class CounterEvent {
