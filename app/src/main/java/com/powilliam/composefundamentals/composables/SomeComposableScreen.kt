@@ -9,8 +9,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.powilliam.composefundamentals.R
 import com.powilliam.composefundamentals.ui.ComposeFundamentalsTheme
+import com.powilliam.composefundamentals.ui.LocalElevations
 import com.powilliam.composefundamentals.viewmodels.CounterState
 
 /*
@@ -39,7 +42,14 @@ fun SomeComposableScreen(
     onIncrement: ActionCallback = {},
     onClickCounterCard: ActionCallback = {}
 ) {
-    val isModuleOfFive by remember(uiState) { derivedStateOf { listOf(-5, 5).contains(uiState.value.value) } }
+    val isModuleOfFive by remember(uiState) {
+        derivedStateOf {
+            listOf(
+                -5,
+                5
+            ).contains(uiState.value.value)
+        }
+    }
 
     /*
     * 1. rememberUpdateState will receive a value and always refer to the latest value calculated during recomposition. Opposite to React useMemo and useCallback
@@ -60,6 +70,13 @@ fun SomeComposableScreen(
 
     Scaffold(
         scaffoldState = scaffoldState,
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                elevation = LocalElevations.current.topAppBar,
+                backgroundColor = MaterialTheme.colors.background
+            )
+        },
         floatingActionButton = {
             ActionButtons(
                 onDecrement = onDecrement,
