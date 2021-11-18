@@ -1,46 +1,47 @@
 package com.powilliam.composefundamentals.ui
 
+import android.content.Context
+import android.os.Build
+import androidx.compose.foundation.Indication
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 
-val Light = lightColors(
+private val LightColorScheme = lightColorScheme(
     primary = Purple500,
-    primaryVariant = Purple700,
     onPrimary = Color.White,
     secondary = Teal200,
-    secondaryVariant = Teal700,
     onSecondary = Color.Black
 )
-val Dark = darkColors(
+private val DarkColorScheme = darkColorScheme(
     primary = Purple200,
-    primaryVariant = Purple700,
     onPrimary = Color.Black,
     secondary = Teal200,
-    secondaryVariant = Teal200,
     onSecondary = Color.Black
 )
 
 @Composable
 fun ComposeFundamentalsTheme(
+    context: Context = LocalContext.current,
     isDark: Boolean = isSystemInDarkTheme(),
+    isDynamicColorSchemeSupported: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
+    ripple: Indication = rememberRipple(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (!isDark) Light else Dark
-    val elevations = if (!isDark) {
-        Elevations(topAppBar = AppBarDefaults.TopAppBarElevation)
-    } else {
-        Elevations(topAppBar = 0.dp)
+    val colorScheme = when {
+        isDark && isDynamicColorSchemeSupported -> dynamicDarkColorScheme(context)
+        !isDark && isDynamicColorSchemeSupported -> dynamicLightColorScheme(context)
+        isDark && !isDynamicColorSchemeSupported -> DarkColorScheme
+        else -> LightColorScheme
     }
 
-    MaterialTheme(colors = colors, shapes = shapes, typography = typography) {
-        CompositionLocalProvider(LocalElevations provides elevations) {
+    MaterialTheme(colorScheme = colorScheme, typography = typography) {
+        CompositionLocalProvider(LocalIndication provides ripple) {
             content()
         }
     }

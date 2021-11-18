@@ -5,7 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.powilliam.composefundamentals.R
 import com.powilliam.composefundamentals.ui.ComposeFundamentalsTheme
-import com.powilliam.composefundamentals.ui.LocalElevations
 import com.powilliam.composefundamentals.viewmodels.CounterState
 
 /*
@@ -31,10 +30,10 @@ import com.powilliam.composefundamentals.viewmodels.CounterState
 * 2. @Composable functions can execute in parallel
 * 3. @Composable functions can be skyped (normally when its parent suffers recompositions but they doesn't need to be redraw)
 * */
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun SomeComposableScreen(
+    modifier: Modifier = Modifier,
     uiState: State<CounterState>,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     onDecrement: ActionCallback = {},
@@ -42,39 +41,13 @@ fun SomeComposableScreen(
     onIncrement: ActionCallback = {},
     onClickCounterCard: ActionCallback = {}
 ) {
-    val isModuleOfFive by remember(uiState) {
-        derivedStateOf {
-            listOf(
-                -5,
-                5
-            ).contains(uiState.value.value)
-        }
-    }
-
-    /*
-    * 1. rememberUpdateState will receive a value and always refer to the latest value calculated during recomposition. Opposite to React useMemo and useCallback
-    *    val currentOnDecrement by rememberUpdatedState(newValue = onDecrement)
-    *    val currentOnReset by rememberUpdatedState(newValue = onReset)
-    *    val currentOnIncrement by rememberUpdatedState(newValue = onIncrement)
-    *    val currentOnClickCounterCard by rememberUpdatedState(newValue = onClickCounterCard)
-    * */
-
-    if (!uiState.value.isPlaceholderVisible && isModuleOfFive) {
-        LaunchedEffect(scaffoldState.snackbarHostState) {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = "You have clicked ${uiState.value.value} times",
-                duration = SnackbarDuration.Short
-            )
-        }
-    }
-
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(id = R.string.app_name)) },
-                elevation = LocalElevations.current.topAppBar,
-                backgroundColor = MaterialTheme.colors.background
+            LargeTopAppBar(
+                title = {
+                    Text(text = stringResource(id = R.string.app_name))
+                },
             )
         },
         floatingActionButton = {
@@ -87,7 +60,7 @@ fun SomeComposableScreen(
         floatingActionButtonPosition = FabPosition.Center
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -96,22 +69,11 @@ fun SomeComposableScreen(
     }
 }
 
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
 @Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun SomeComposableScreen_LightPreview() {
-    ComposeFundamentalsTheme(isDark = false) {
-        SomeComposableScreen(uiState = remember { mutableStateOf(CounterState(value = 0)) })
-    }
-}
-
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
 @Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun SomeComposableScreen_DarkPreview() {
-    ComposeFundamentalsTheme {
+private fun SomeComposableScreen_Preview() {
+    ComposeFundamentalsTheme(isDark = false) {
         SomeComposableScreen(uiState = remember { mutableStateOf(CounterState(value = 0)) })
     }
 }

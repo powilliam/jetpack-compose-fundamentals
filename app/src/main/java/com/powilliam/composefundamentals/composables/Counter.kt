@@ -2,25 +2,38 @@ package com.powilliam.composefundamentals.composables
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Indication
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
-import androidx.compose.material.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.powilliam.composefundamentals.ui.ComposeFundamentalsTheme
 import com.powilliam.composefundamentals.viewmodels.CounterState
 
-@ExperimentalAnimationApi
-@ExperimentalMaterialApi
 @Composable
-fun Counter(uiState: CounterState, onClick: () -> Unit = {}) {
+fun Counter(
+    modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    indication: Indication = LocalIndication.current,
+    shape: Shape = RoundedCornerShape(percent = 25),
+    tonalElevation: Dp = 2.dp,
+    uiState: CounterState,
+    onClick: () -> Unit = {}
+) {
     /*
     * 1. @Composable functions can store a single object in memory by using remember delegating function.
     * 2. It will store the initial value during the composition and return during recomposition.
@@ -30,46 +43,38 @@ fun Counter(uiState: CounterState, onClick: () -> Unit = {}) {
     * val (visible, visibleSet) = remember { mutableStateOf(value = false) }
     * */
 
-    Card(
-        onClick = onClick,
-        backgroundColor = MaterialTheme.colors.primarySurface,
+    Surface(
+        modifier = modifier,
+        shape = shape,
+        tonalElevation = tonalElevation
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(all = 8.dp)
+            modifier = modifier
+                .clickable(interactionSource, indication) {
+                    onClick()
+                }
                 .animateContentSize()
+                .padding(all = 16.dp)
         ) {
-            Text(text = "${uiState.value}", style = MaterialTheme.typography.h6)
-
+            Text(text = "${uiState.value}", style = MaterialTheme.typography.bodyLarge)
             AnimatedVisibility(visible = uiState.isPlaceholderVisible) {
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    Text(text = "Times you have clicked", style = MaterialTheme.typography.subtitle1)
+                    Text(
+                        text = "Times you have clicked",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
         }
     }
 }
 
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
 @Preview
-@Composable
-private fun Counter_LightPreview() {
-    ComposeFundamentalsTheme {
-        Column {
-            Counter(uiState = CounterState(value = 0))
-            Counter(uiState = CounterState(value = 0, isPlaceholderVisible = true))
-        }
-    }
-}
-
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
-private fun Counter_DarkPreview() {
+private fun Counter_Preview() {
     ComposeFundamentalsTheme {
         Column {
             Counter(uiState = CounterState(value = 0))

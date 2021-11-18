@@ -53,6 +53,7 @@ dependencies {
     implementation Dependencies.AndroidX.Compose.tooling
     implementation Dependencies.AndroidX.Compose.foundation
     implementation Dependencies.AndroidX.Compose.material
+    implementation Dependencies.AndroidX.Compose.material3
     implementation Dependencies.AndroidX.Compose.icons
     implementation Dependencies.AndroidX.Compose.iconsExtended
     implementation Dependencies.AndroidX.Compose.runtime
