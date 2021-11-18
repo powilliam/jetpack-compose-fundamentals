@@ -29,7 +29,6 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion Dependencies.composeVersion
-        kotlinCompilerVersion Dependencies.kotlinVersion
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -48,7 +47,6 @@ dependencies {
 
     implementation Dependencies.AndroidX.Activity.activityCompose
 
-    implementation Dependencies.AndroidX.Lifecycle.viewModel
     implementation Dependencies.AndroidX.Lifecycle.viewModelCompose
 
     implementation Dependencies.AndroidX.Compose.ui
